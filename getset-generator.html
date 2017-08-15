@@ -1,0 +1,68 @@
+<html>
+<head>
+<title>Get / Set Generator</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+function gerar() {
+    var strClass = getCleanText();
+    var pieces = strClass.split('protected ');
+    var getSets = '';
+    for(var block in pieces) {
+        var property = pieces[block].split(';')[0].split('$');
+        if(property.length <= 1) continue;
+        property = property[1];
+        var capProperty = property;
+        capProperty[0] = capProperty[0].toUpperCase();
+        getSets += 'public function get' + capProperty + '() {\n\treturn $this->' + property + ';\n}\n';
+        getSets += 'public function set' + capProperty + '($value) {\n\t$this->' + property + ' = $value;\n\treturn $this;\n}\n\n';
+    }
+    document.getElementById('result').value = getSets;
+}
+
+function getCleanText(){
+    var noBreaksText = document.getElementById("classText").value;
+
+    noBreaksText = noBreaksText.replace(/(\r\n|\n|\r)/gm,"<1br />");
+
+    re1 = /<1br \/><1br \/>/gi;
+    re1a = /<1br \/><1br \/><1br \/>/gi;
+
+
+    noBreaksText = noBreaksText.replace(re1a,"<1br /><2br />");
+    noBreaksText = noBreaksText.replace(re1,"<2br />");
+
+    re2 = /\<1br \/>/gi;
+    noBreaksText = noBreaksText.replace(re2, " ");
+
+    re3 = /\s+/g;
+    noBreaksText = noBreaksText.replace(re3," ");
+
+    re4 = /<2br \/>/gi;
+    noBreaksText = noBreaksText.replace(re4,"\n\n");
+    return noBreaksText;
+}
+</script>
+
+</head>
+
+<body class="form form-horizontal">
+<h1>Importante:</h1>
+<ul>
+    <ol>Esse gerador gera para linguagem PHP</ol>
+    <ol>Gera apenas de properties com acesso protected</ol>
+</ul>
+<h2>Sua Classe</h2>
+<textarea id="classText" cols="50" class="form-control" rows="8"></textarea>
+<br>
+<a class="btn btn-primary" onclick="javascript: gerar()">Gerar</a>
+<br>
+<h2>Getters e Setters:</h2>
+<textarea class="form-control" id="result" cols="50" rows="8"></textarea>
+<hr>
+<div class="text-center">
+<small>Desenvolvido em 5 min. para agilizar desenvolvimento pessoal<br>
+<a href="http://andersonsilva.info" target="_blank">AndersonSilva.info</a>
+</div>
+</body>
