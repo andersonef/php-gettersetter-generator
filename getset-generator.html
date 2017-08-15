@@ -13,6 +13,7 @@ function gerar() {
         var property = pieces[block].split(';')[0].split('$');
         if(property.length <= 1) continue;
         property = property[1];
+        property = property.split(' ')[0];
         var capProperty = property;
         capProperty[0] = capProperty[0].toUpperCase();
         getSets += 'public function get' + capProperty + '() {\n\treturn $this->' + property + ';\n}\n';
